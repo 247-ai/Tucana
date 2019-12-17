@@ -21,13 +21,13 @@ Following are the links for docker installation.
 1. `cd Tucana`
 2. `mvn clean package -DskipTests`
 
-### Running ModelServer tests
+### Running Tucana tests
 1. `cd ../Docker`
 2. To run the complete test suite:
  
      `./run-docker.sh "test"`
 
-### Using docker shell with ModelServer
+### Using docker shell with Tucana
 The following commands would drop you into a docker bash shell with all ModelServer dependencies ready. There you can run other usual commands.
 
 1. `cd ../docker`
