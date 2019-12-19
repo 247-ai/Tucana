@@ -1,0 +1,169 @@
+swagger: "2.0"
+
+info:
+  description: "Predict Server API lets you run the prediction requests for the given features."
+  version: "1.0.0"
+  title: "Predict-Server API"
+  termsOfService: "http://247.ai/terms/"
+  contact:
+    email: "dsg-flashml@247.ai"
+  license:
+    name: "Proprietry"
+    url: "http://247.ai"
+host: "predictserver.api.247.ai"
+basePath: "/predictserver/v1"
+tags:
+  - name: "Predict"
+    description: "Predict the response for the given features"
+schemes:
+  - "https"
+
+# Define Path end-points
+paths:
+  /models/{modelId}/versions/{version}/predict:
+    get:
+      tags:
+        - "Predict"
+      summary: "Return the predicted response with probability"
+      description: "Predict the response column for the given features"
+      produces:
+        - "application/json"
+      consumes:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "tucana-devKey"
+          description: "The devKey for the user"
+          type: string
+          required: true
+        - in: "path"
+          name: "modelId"
+          description: "Model ID with which we want to run the predict request"
+          type: string
+          required: true
+        - in: "path"
+          name: "version"
+          description: "Version of the model"
+          type: string
+          required: true
+        - in: "body"
+          name: "input"
+          description: "Features for which we want to run prediciton"
+          required: true
+          schema:
+            $ref: "#/definitions/InputRow"
+      responses:
+        200:
+          description: "Prediction completed"
+          schema:
+            $ref: "#/definitions/PredictResponse"
+        403:
+          description: "Unauthorized due to missing devKey or invalid devKey"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        404:
+          description: "User Not Found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /models/{modelId}/versions/{version}/predict-topk:
+    get:
+      tags:
+        - "Predict"
+      summary: "Returns the top N prediction responses and their probabilities"
+      description: "Predicts the top N response columns for the given features"
+      produces:
+        - "application/json"
+      consumes:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "tucana-devKey"
+          description: "The devKey for the user"
+          type: string
+          required: true
+        - in: "path"
+          name: "modelId"
+          description: "Model ID with which we want to run the predict request"
+          type: string
+          required: true
+        - in: "path"
+          name: "version"
+          description: "Version of the model"
+          type: string
+          required: true
+        - in: "body"
+          name: "input"
+          description: "Features for which we want to run prediciton"
+          required: true
+          schema:
+            $ref: "#/definitions/InputRow"
+      responses:
+        200:
+          description: "Prediction completed"
+          schema:
+            $ref: "#/definitions/PredictResponseTopK"
+        403:
+          description: "Unauthorized due to missing devKey or invalid devKey"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        404:
+          description: "User Not Found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+definitions:
+
+  InputRow:
+    type: "object"
+    properties:
+      row:
+        type: "array"
+        description: "Array of input features"
+        items:
+          type: string
+
+  PredictResponse:
+    type: "object"
+    properties:
+      prediction_label:
+        type: "string"
+        description: "Predicted label for given input"
+      probability:
+        type: "integer"
+        format: "float"
+        description: "Probability of the predicted label"
+
+  PredictResponseTopK:
+    type: "object"
+    properties:
+      intents:
+        type: "array"
+        items:
+          $ref: "#/definitions/TopKField"
+
+  TopKField:
+    type: "object"
+    properties:
+      className:
+        type: string
+        description: "Intent name"
+      score:
+        type: "integer"
+        format: "float"
+        description: "Probability score for the intent"
+
+  ErrorResponse:
+    type: "object"
+    properties:
+      error:
+        type: "object"
+        properties:
+          code:
+            type: "integer"
+            format: "int32"
+          type:
+            type: "string"
+          message:
+            type: "string"
+      
