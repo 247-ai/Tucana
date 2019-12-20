@@ -28,7 +28,7 @@ ENV PATH=$PATH:$SCALA_HOME/bin
 
 RUN mkdir /Tucana
 
-COPY tucana-*.jar /Tucana/
+COPY Tucana-*.jar /Tucana/
 COPY flashml-noPage.zip /Tucana/
 COPY predict-server-config.conf /Tucana/
 COPY run-tucana-tests.sh /Tucana/run-tucana-tests.sh

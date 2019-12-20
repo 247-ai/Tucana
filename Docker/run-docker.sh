@@ -6,8 +6,8 @@ sudo docker build -t tucana ./
 # Hostname for docker container
 dockerHostname="tucana-docker"
 
-predictServerTestJar=`ls tucana-*-tests.jar`
-predictServerMainJar=`ls tucana*[^tests].jar`
+predictServerTestJar=`ls Tucana-*-tests.jar`
+predictServerMainJar=`ls Tucana*[^tests].jar`
 
 if [[ "$1" == "test" ]]
 then
