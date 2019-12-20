@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.247-ai</groupId>
-    <artifactId>tucana</artifactId>
+    <artifactId>Tucana</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>tucana</name>
+    <name>Tucana</name>
     <url>https://github.com/247-ai/Tucana</url>
-    <description>A predict server which returns prediction results by running our data against uploaded models
+    <description>A server which returns prediction results by running our data against uploaded models
     </description>
 
     <dependencies>
@@ -140,10 +140,6 @@
     </distributionManagement>
 
     <developers>
-        <developer>
-            <name>Neelesh Sambhajiche</name>
-            <email>sambhajicheneelesh@gmail.com</email>
-        </developer>
         <developer>
             <name>Udhaya Kumar</name>
             <email>udhayakumar.murugesan@gmail.com</email>
