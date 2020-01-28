@@ -1,12 +1,12 @@
 # Tucana
-This is a project from Data Science Engineering team at [24]7.ai for creating a service for deploying a combination of Spark models and generic rules (in Javascript or Python) in production. The library is built on top of akka-HTTP. Currently the server supports two operations: returning the predicted class with maximum probability and top N classes and their probabilities
+This is a project from Data Science Engineering team at [24]7.ai for creating a service for deploying a combination of Spark models using [Mleap technology](https://github.com/combust/mleap) and generic rules (in Javascript or Python) in production. The library is built on top of [akka-HTTP](https://doc.akka.io/docs/akka-http/current/index.html). Currently the server supports two operations: returning the predicted class with maximum probability and top N classes and their probabilities
 
 ## Dependencies
 0. JDK 8. OpenJDK 8 can be used without any issues.
 1. Scala: Version 2.11.12
     - The binaries should be in the path
 2. Maven: Version 3.3.9 or above
-        - The binaries should be in the path
+    - The binaries should be in the path
 3. [Optional, for development] IntelliJ IDEA Community Edition
 
 ## Running with docker
