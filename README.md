@@ -1,5 +1,5 @@
 # Tucana
-Predict server is a multi threaded server for real-time prediction similar to RTDP which is built on top of akka-HTTP. This server supports two operations such as returning the predicted class with maximum probability and top N classes and their probabilities
+This is a project from Data Science Engineering team at [24]7.ai for creating a service for deploying a combination of Spark models and generic rules (in Javascript or Python) in production. The library is built on top of akka-HTTP. Currently the server supports two operations: returning the predicted class with maximum probability and top N classes and their probabilities
 
 ## Dependencies
 0. JDK 8. OpenJDK 8 can be used without any issues.
