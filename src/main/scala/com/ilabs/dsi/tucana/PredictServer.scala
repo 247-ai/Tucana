@@ -29,6 +29,16 @@ object PredictServer extends App with PredictRoute
     supervisorStrategy = sparkActorStrategy).props(routeeProps = sparkProps)
   val sparkRouter = system.actorOf(sparkRouterProps, name = "SparkPredictorActor")
 
+  //JS Actor props block
+  /*val jsActorStrategy = OneForOneStrategy(){
+    case _ => SupervisorStrategy.restart
+  }
+  val jsProps = Props(new JSPredictionActor())
+  val jsRouterProps = RoundRobinPool(
+    PredictServerConfig.get("jsActor.pool.concurrency").toInt,
+    supervisorStrategy = jsActorStrategy).props(routeeProps = jsProps)
+  val jsRouter = system.actorOf(jsRouterProps, name = "JSPredictorActor")*/
+
   val bindingFuture1 = Http().bindAndHandle(route, PredictServerConfig.get("http.interface"), PredictServerConfig.get("http.port").toInt)
   println(s"Predict Server online at http://${PredictServerConfig.get("http.interface")}:${PredictServerConfig.get("http.port")}/")
 

@@ -50,34 +50,57 @@ object DBManager
             model = result.getBytes(1)
             schema = result.getString(2)
         }
-        stmt.close()
-        conn.close()
+        /*stmt.close()
+        conn.close()*/
         (model,schema)
     }
 
-    def setModel(modelId: String, version: String, userId: String, description: String, model: Array[Byte], schema: String): Unit =
+    def getSchema(modelId:String,version:String) ={
+      Class.forName(PredictServerConfig.get("db.driver"))
+      val conn = DriverManager.getConnection(PredictServerConfig.get("db.url"),PredictServerConfig.get("db.user"),PredictServerConfig.get("db.password"))
+      val sql = "select dataSchema from tucanamodels where modelId=? and version=?"
+      val stmt = conn.prepareStatement(sql)
+      stmt.setString(1, modelId)
+      stmt.setString(2,version)
+      val result = stmt.executeQuery()
+      var schema = ""
+      while(result.next()) {
+        schema = result.getString(1)
+      }
+      /*stmt.close()
+      conn.close()*/
+      (schema)
+    }
+
+    def setModel(modelId: String, version: String, userId: String, description: String, model: Array[Byte], schema: String, modelType: String): Unit =
     {
         Class.forName(PredictServerConfig.get("db.driver"))
         val conn = DriverManager.getConnection(PredictServerConfig.get("db.url"), PredictServerConfig.get("db.user"), PredictServerConfig.get("db.password"))
-        val sql = "insert into tucanamodels values(?,?,?,?,?,?,?)"
+        val sql = "insert into tucanamodels values(?,?,?,?,?,?,?,?)"
         val stmt = conn.prepareStatement(sql)
         stmt.setString(1, modelId)
         stmt.setString(2, version)
         stmt.setString(3, userId)
         stmt.setString(4, description)
         stmt.setString(5, s"${Date.from(Instant.now).toString}")
-        stmt.setBytes(6, model)
-        stmt.setString(7, schema)
+        stmt.setString(6,modelType)
+        stmt.setBytes(7, model)
+        stmt.setString(8, schema)
         //stmt.setString(8, modelType)
         stmt.executeUpdate()
-        stmt.close()
-        conn.close()
+        /*stmt.close()
+        conn.close()*/
     }
 
-    /*def getModelType(modelId:String,version:String) = {
+    def getModelType(modelId:String,version:String) = {
         val db = Database.forConfig("mysqldb", PredictServerConfig.config)
         Await.result(db.run(sql"""select modelType from tucanamodels where modelId = $modelId and version = $version""".as[String]), Duration.Inf)(0)
-    }*/
+    }
+
+  def getModelDependancy(modelId:String,version:String) = {
+    val db = Database.forConfig("mysqldb", PredictServerConfig.config)
+    Await.result(db.run(sql"""select dependancy from tucanamodels where modelId = $modelId and version = $version""".as[String]), Duration.Inf)(0)
+  }
 
     //def storeModel()
 

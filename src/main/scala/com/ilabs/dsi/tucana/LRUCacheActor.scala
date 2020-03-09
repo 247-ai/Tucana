@@ -39,7 +39,8 @@ class LRUCacheActor extends Actor {
   }
 
   def receive = {
-    case getModel(key) => sender() ! get(key)
+    case
+      getModel(key) => sender() ! get(key)
     case putModel(key,value) => put(key,value)
   }
 

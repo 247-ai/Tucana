@@ -53,9 +53,10 @@ class SparkPredictionActor(cacheActor:ActorRef) extends Actor {
       val predictLeapFrame = model.transform(inputLeapFrame).get
       val predictionColumn = if (predictLeapFrame.schema.hasField("prediction_label")) "prediction_label" else "prediction"
       val resultJson = if(request.equals("predict")) {
-        val resultDataset = predictLeapFrame.select(predictionColumn, "probability").get.dataset
+        val resultDataset = predictLeapFrame.select(predictionColumn, "probability", "isHotLead").get.dataset
         val resultMap = resultDataset.map(record => Map(predictionColumn -> record(0).toString,
-                                                        "probability" -> record(1).asInstanceOf[DenseTensor[Double]].values.sorted(Ordering.Double.reverse)(0).toString)).head
+                                                        "probability" -> (if(record(1).asInstanceOf[DenseTensor[Double]].size > 2) record(1).asInstanceOf[DenseTensor[Double]].values.sorted(Ordering.Double.reverse)(0).toString else record(1).asInstanceOf[DenseTensor[Double]].values(record(0).asInstanceOf[Double].toInt)),
+                                                        "isHotLead" -> (if(record.size > 2) record(2).asInstanceOf[Boolean].toString else "NA"))).head
         new Json.Value(resultMap).write
       } else if (request.equals("topk")) {
         val resultDataset = predictLeapFrame.select(topKCol).get.dataset

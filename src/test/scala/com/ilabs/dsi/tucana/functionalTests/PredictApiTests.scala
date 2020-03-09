@@ -31,13 +31,13 @@ class PredictApiTests extends WordSpec with ScalatestRouteTest with Matchers wit
     val dateStorageformat = new SimpleDateFormat(DATETIME_FORMAT)
     val db = Database.forConfig("db", PredictServerConfig.config)
     Await.result(db.run(sqlu"create table if not exists users ( userId varchar(200) not null primary key,devKey varchar(200) not null unique, registerDate DATETIME not null, isAdmin boolean);"),Duration.Inf)
-    Await.result(db.run(sqlu"create table if not exists tucanamodels ( modelId varchar(200) not null, version varchar(100) not null, userId varchar(200) not null references users (userId), description varchar(250), lastUpdateTimestamp text, model longblob, dataSchema varchar(20000), primary key (modelId, version));"),Duration.Inf)
+    Await.result(db.run(sqlu"create table if not exists tucanamodels ( modelId varchar(200) not null, version varchar(100) not null, userId varchar(200) not null references users (userId), description varchar(250), lastUpdateTimestamp text, modelType varchar(250), model longblob, dataSchema varchar(20000), primary key (modelId, version));"),Duration.Inf)
     Await.result(db.run(sqlu"delete from users where userId='tucanaUser'"), Duration.Inf)
     Await.result(db.run(sqlu"insert into users values('tucanaUser','a998274b98', ${dateStorageformat.format(Date.from(Instant.now))},true)"), Duration.Inf)
     Await.result(db.run(sqlu"delete from tucanamodels where modelId='tucana1' and version = 'v1'"), Duration.Inf)
     val modelFile = File("flashml-noPage.zip")
     val modelBytes = modelFile.bytes().toArray
-    DBManager.setModel("tucana1","v1","tucanaUser","Tucana model testing",modelBytes,"""{"fields":[{"type":"string","name":"lineText"}],"topKCol":"top_intents"}""".stripMargin)
+    DBManager.setModel("tucana1","v1","tucanaUser","Tucana model testing",modelBytes,"""{"fields":[{"type":"string","name":"lineText"}],"topKCol":"top_intents"}""".stripMargin,"Spark")
   }
   initializeDB()
   val cacheRef = TestActorRef[LRUCacheActor](new LRUCacheActor())

@@ -95,6 +95,19 @@
             <version>1.2.1</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.python/jython-standalone -->
+        <dependency>
+            <groupId>org.python</groupId>
+            <artifactId>jython-standalone</artifactId>
+            <version>2.7.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cat.inspiracio</groupId>
+            <artifactId>rhino-js-engine</artifactId>
+            <version>1.7.7.1</version>
+        </dependency>
+
         <dependency>
             <groupId>ml.combust.mleap</groupId>
             <artifactId>mleap-runtime_2.11</artifactId>

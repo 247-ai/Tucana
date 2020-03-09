@@ -46,6 +46,7 @@ trait PredictRoute extends SprayJsonSupport with DefaultJsonProtocol{
       .result()
 
   val sparkRouter : ActorRef
+  //val jsRouter : ActorRef
   val route : Route = (handleExceptions(serverExceptionHandler)
     & handleRejections(serverRejectionHandler)
     & pathPrefix("predictserver"/"v1")
@@ -64,6 +65,8 @@ trait PredictRoute extends SprayJsonSupport with DefaultJsonProtocol{
                       entity(as[String]) {
                         webInput => {
                             implicit val timeout = Timeout(180 seconds)
+                            val schema = DBManager.getSchema(modelId,version)
+                            //val resultJson = Await.result(jsRouter ? (modelId, version, webInput))
                             val resultJson = Await.result(sparkRouter ? (modelId, version, webInput, "predict"), timeout.duration).asInstanceOf[String]
                             validate (!resultJson.equals(""),ErrorConstants.MODEL_LOAD_ERROR) {
                               complete(HttpEntity(ContentTypes.`application/json`, resultJson))
